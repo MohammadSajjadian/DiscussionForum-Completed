@@ -1,22 +1,22 @@
-﻿using Discussion_Forum.Areas.Identity.Data;
+﻿using Data.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
-namespace Discussion_Forum.Data;
+namespace Data.Context;
 
 public class DBforum : IdentityDbContext<ApplicationUser>
 {
+    public DbSet<Discussion> discussions { get; set; } = null!;
+    public DbSet<Forum> forums { get; set; } = null!;
+    public DbSet<Topic> topics { get; set; } = null!;
+    public DbSet<Post> posts { get; set; } = null!;
+    public DbSet<Report> reports { get; set; } = null!;
+    public DbSet<Like> likes { get; set; } = null!;
+    public DbSet<Save> saves { get; set; } = null!;
+
     public DBforum(DbContextOptions<DBforum> options)
         : base(options)
     {
-    }
-
-    protected override void OnModelCreating(ModelBuilder builder)
-    {
-        base.OnModelCreating(builder);
-        // Customize the ASP.NET Identity model and override the defaults if needed.
-        // For example, you can rename the ASP.NET Identity table names and more.
-        // Add your customizations after calling base.OnModelCreating(builder);
     }
 }

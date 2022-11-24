@@ -1,6 +1,7 @@
-using Discussion_Forum.Areas.Identity.Data;
-using Discussion_Forum.Data;
+using Data.Context;
+using Data.Entities;
 using Microsoft.EntityFrameworkCore;
+using Service.DBConnection;
 
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("DBforumConnection") ?? throw new InvalidOperationException("Connection string 'DBforumConnection' not found.");
@@ -11,16 +12,14 @@ builder.Services.AddDbContext<DBforum>(options =>
 builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddEntityFrameworkStores<DBforum>();
 
-// Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.ConnectToSqlServer(builder.Configuration);
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 
