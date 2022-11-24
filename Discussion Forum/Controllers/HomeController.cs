@@ -1,5 +1,4 @@
-﻿using Discussion_Forum.Models;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
 namespace Discussion_Forum.Controllers
