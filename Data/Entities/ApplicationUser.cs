@@ -12,6 +12,7 @@ public class ApplicationUser : IdentityUser
     public string nickName { get; set; }
     public string aboutMe { get; set; }
     public byte[] profileImg { get; set; }
+    public DateTime tokenCreationTime { get; set; }
 
     #region ICollections
     public ICollection<Topic> topics { get; set; }
