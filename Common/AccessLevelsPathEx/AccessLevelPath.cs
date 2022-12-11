@@ -12,7 +12,7 @@ namespace Extension.AccessLevelsPathEx
     {
         public static IServiceCollection AccessLevelPathConfiguration(this IServiceCollection service)
         {
-            CookieAuthenticationOptions options = new() { LoginPath = "Index/Login", AccessDeniedPath = "Index/Login" };
+            CookieAuthenticationOptions options = new() { LoginPath = "/Login/Index", AccessDeniedPath = "/Login/Index" };
             return service;
         }
     }

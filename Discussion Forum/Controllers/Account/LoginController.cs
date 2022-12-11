@@ -46,19 +46,26 @@ namespace Discussion_Forum.Controllers.Account
             if (isLockedOut == true)
             {
                 TempData[warning] = lockedOutMessage;
-                return RedirectToAction(nameof(homeIndexActionName), nameof(homeControllerName));
+                return RedirectToAction(homeIndexActionName, homeControllerName);
             }
             else return Ok();
         }
 
         public IActionResult IsLoginSucceeded(bool succeeded)
         {
-            if (succeeded == true) return RedirectToAction(nameof(homeIndexActionName), nameof(homeControllerName));
+            if (succeeded == true) return RedirectToAction(homeIndexActionName, homeControllerName);
             else
             {
                 TempData[error] = loginError;
                 return RedirectToAction(nameof(Index));
             }
+        }
+
+        public async Task<IActionResult> LogOut()
+        {
+            await signInManager.SignOutAsync();
+
+            return RedirectToAction(homeIndexActionName, homeControllerName);
         }
     }
 }

@@ -64,6 +64,7 @@ namespace Discussion_Forum.Controllers.Account
         {
             string token = await userManager.GenerateEmailConfirmationTokenAsync(user);
             string url = Url.Action(nameof(ConfirmEmail), nameof(RegisterControllerName), new { token, userId = user.Id }, "https");
+
             await UpdateTokenCreationTime(user);
             SendEmail(url, user.Email);
         }
@@ -76,8 +77,8 @@ namespace Discussion_Forum.Controllers.Account
 
         public IActionResult SendEmail(string url, string email)
         {
-            emailServices.EmailSender(nameof(emailConfirmationSubject), $"{emailConfirmationBody}{url}", email);
-            return RedirectToAction(nameof(homeIndexActionName), nameof(homeControllerName));
+            emailServices.EmailSender(emailConfirmationSubject, $"{emailConfirmationBody}{url}", email);
+            return RedirectToAction(homeIndexActionName, homeControllerName);
         }
 
         public async Task<IActionResult> ConfirmEmail(string token, string userId)
@@ -93,7 +94,7 @@ namespace Discussion_Forum.Controllers.Account
                 await userManager.DeleteAsync(user);
                 TempData[error] = emailConfirmationExpire;
             }
-            return RedirectToAction(nameof(homeIndexActionName), nameof(homeControllerName));
+            return RedirectToAction(homeIndexActionName, homeControllerName);
         }
 
         public async Task IsEmailConfirmed(bool succeeded, ApplicationUser user)
