@@ -1,4 +1,4 @@
-namespace Discussion_Forum.Models
+namespace Data.Context
 {
     public class ErrorViewModel
     {
