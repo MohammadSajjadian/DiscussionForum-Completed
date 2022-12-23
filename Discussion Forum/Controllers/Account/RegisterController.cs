@@ -99,12 +99,21 @@ namespace Discussion_Forum.Controllers.Account
 
         public async Task IsEmailConfirmed(bool succeeded, ApplicationUser user)
         {
-            if (succeeded == true) TempData[success] = emailConfirmed;
+            if (succeeded == true)
+            {
+                TempData[success] = emailConfirmed;
+                await AddUserToUserRule(user);
+            }
             else
             {
                 await userManager.DeleteAsync(user);
                 TempData[error] = emailConfirmationFailed;
             }
+        }
+
+        public async Task AddUserToUserRule(ApplicationUser user)
+        {
+            await userManager.AddToRoleAsync(user, "user");
         }
 
         public async Task<IActionResult> IsUserNameExist(string userName)
