@@ -32,10 +32,18 @@ namespace Discussion_Forum.Controllers.Account
             {
                 user = new ApplicationUser() { UserName = registerViewModel.userName, Email = registerViewModel.userName };
                 var status = await userManager.CreateAsync(user, registerViewModel.password);
-                await IsRegisterSucceeded(status.Succeeded, user);
 
-                // Just return somthing to avoid getting "not all code paths return a value" error.
-                return Ok();
+                if (status.Succeeded == true)
+                {
+                    await CreateTokenUrl(user);
+                    return RedirectToAction(index, homeControllerName);
+                }
+                else
+                {
+                    TempData[error] = registerErrorMessage;
+                    return RedirectToAction(nameof(Index));
+                }
+
             }
             else
             {
@@ -44,26 +52,10 @@ namespace Discussion_Forum.Controllers.Account
             }
         }
 
-        public async Task<IActionResult> IsRegisterSucceeded(bool succeeded, ApplicationUser user)
-        {
-            if (succeeded == true)
-            {
-                await CreateTokenUrl(user);
-
-                // Just return somthing to avoid getting "not all code paths return a value" error.
-                return Ok();
-            }
-            else
-            {
-                TempData[error] = registerErrorMessage;
-                return RedirectToAction(nameof(Index));
-            }
-        }
-
         public async Task CreateTokenUrl(ApplicationUser user)
         {
             string token = await userManager.GenerateEmailConfirmationTokenAsync(user);
-            string url = Url.Action(nameof(ConfirmEmail), nameof(RegisterControllerName), new { token, userId = user.Id }, "https");
+            string url = Url.Action(nameof(ConfirmEmail), RegisterControllerName, new { token, userId = user.Id }, "https");
 
             await UpdateTokenCreationTime(user);
             SendEmail(url, user.Email);
@@ -75,10 +67,10 @@ namespace Discussion_Forum.Controllers.Account
             await userManager.UpdateAsync(user);
         }
 
-        public IActionResult SendEmail(string url, string email)
+        public void SendEmail(string url, string email)
         {
-            emailServices.EmailSender(emailConfirmationSubject, $"{emailConfirmationBody}{url}", email);
-            return RedirectToAction(homeIndexActionName, homeControllerName);
+            emailServices.EmailSender(emailConfirmationSubject, $"جهت تایید نام کاربری روی این <a href='{url}'>لینک</a> کلیک کنید.", email);
+            TempData[success] = emailConfirmationMessage;
         }
 
         public async Task<IActionResult> ConfirmEmail(string token, string userId)
@@ -87,27 +79,28 @@ namespace Discussion_Forum.Controllers.Account
             if (DateTime.Now.Subtract(user.tokenCreationTime) <= TimeSpan.FromHours(1))
             {
                 var status = await userManager.ConfirmEmailAsync(user, token);
-                await IsEmailConfirmed(status.Succeeded, user);
+
+                if (status.Succeeded)
+                {
+                    TempData[success] = emailConfirmed;
+                    await AddUserToUserRule(user);
+
+                    return RedirectToAction(index, LoginControllerName);
+                }
+                else
+                {
+                    await userManager.DeleteAsync(user);
+                    TempData[error] = emailConfirmationFailed;
+
+                    return RedirectToAction(index, RegisterControllerName);
+                }
             }
             else
             {
                 await userManager.DeleteAsync(user);
                 TempData[error] = emailConfirmationExpire;
-            }
-            return RedirectToAction(homeIndexActionName, homeControllerName);
-        }
 
-        public async Task IsEmailConfirmed(bool succeeded, ApplicationUser user)
-        {
-            if (succeeded == true)
-            {
-                TempData[success] = emailConfirmed;
-                await AddUserToUserRule(user);
-            }
-            else
-            {
-                await userManager.DeleteAsync(user);
-                TempData[error] = emailConfirmationFailed;
+                return RedirectToAction(index, RegisterControllerName);
             }
         }
 
@@ -119,8 +112,8 @@ namespace Discussion_Forum.Controllers.Account
         public async Task<IActionResult> IsUserNameExist(string userName)
         {
             ApplicationUser user = await userManager.FindByNameAsync(userName);
-            if (user != null) return Json(true);
-            else return Json(false);
+            if (user != null) return Json(false);
+            else return Json(true);
         }
     }
 }

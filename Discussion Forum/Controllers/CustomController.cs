@@ -12,9 +12,10 @@ namespace Discussion_Forum.Controllers
         #endregion
 
         #region Action&Controllers
+        public const string index = "Index";
         public const string homeControllerName = "Home";
         public const string RegisterControllerName = "Register";
-        public const string homeIndexActionName = "Index";
+        public const string LoginControllerName = "Login";
         #endregion
 
         #region Messages
@@ -28,7 +29,6 @@ namespace Discussion_Forum.Controllers
         public const string userExist = "کاربر در حال حاظر موجود میباشد";
         public const string registerErrorMessage = "فرمت نام کاربری یا رمز عبور نادرست است";
         public const string emailConfirmationSubject = "تایید نام کاربری";
-        public const string emailConfirmationBody = "جهت تایید نام کاربری روی لینک زیر کلیک کنید:\n";
         public const string emailConfirmationExpire = "لینک فعالسازی ایمیل منقضی شده است. لطفا دوباره تلاش کنید";
         public const string emailConfirmed = "حساب کاربری شما با موفقیت فعال شد";
         public const string emailConfirmationFailed = "فعال سازی حساب کاربری با شکست مواجه شد، لطفا دوباره امتحان کنید";

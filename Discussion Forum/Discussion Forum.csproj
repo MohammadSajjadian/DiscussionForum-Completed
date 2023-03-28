@@ -23,8 +23,4 @@
     <ProjectReference Include="..\Service\Service.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Views\Register\" />
-  </ItemGroup>
-
 </Project>

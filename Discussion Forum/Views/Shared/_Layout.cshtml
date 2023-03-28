@@ -7,6 +7,23 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/Discussion_Forum.styles.css" asp-append-version="true" />
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <style>
+        .field-validation-error {
+            color: red
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 95vh;
+        }
+
+        footer {
+            margin-top: auto;
+        }
+    </style>
 </head>
 <body>
     <header>
@@ -19,20 +36,20 @@
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
-                        @if(User.Identity.IsAuthenticated)
+                        @if (User.Identity.IsAuthenticated)
                         {
-                           <li class="nav-item">
-                              <a class="nav-link text-dark" asp-controller="Login" asp-action="LogOut">خروج</a>
-                          </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-controller="Login" asp-action="LogOut">LogOut</a>
+                            </li>
                         }
                         else
                         {
-                          <li class="nav-item">
-                              <a class="nav-link text-dark" asp-controller="Login" asp-action="Index">Login</a>
-                          </li>
-                          <li class="nav-item">
-                              <a class="nav-link text-dark" asp-controller="Register" asp-action="Index">Register</a>
-                          </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-controller="Login" asp-action="Index">Login</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-controller="Register" asp-action="Index">Register</a>
+                            </li>
                         }
                     </ul>
                 </div>
@@ -59,3 +76,50 @@
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
+
+@if (TempData["error"] != null)
+{
+    <script>
+        Swal.fire({
+            icon: 'error',
+            title: 'خطا!',
+            text: '@Html.Raw(TempData["error"])',
+            confirmButtonText: 'باشه',
+        })
+    </script>
+}
+
+@if (TempData["success"] != null)
+{
+    <script>
+        Swal.fire({
+            icon: 'success',
+            text: '@Html.Raw(TempData["success"])',
+            confirmButtonText: 'باشه',
+        })
+    </script>
+}
+
+@if (TempData["info"] != null)
+{
+    <script>
+        Swal.fire({
+            icon: 'info',
+            title: 'پبغام',
+            text: '@Html.Raw(TempData["info"])',
+            confirmButtonText: 'باشه',
+        })
+    </script>
+}
+
+@if (TempData["warning"] != null)
+{
+    <script>
+        Swal.fire({
+            icon: 'warning',
+            title: 'اخطار',
+            text: '@Html.Raw(TempData["warning"])',
+            confirmButtonText: 'باشه',
+        })
+    </script>
+}
