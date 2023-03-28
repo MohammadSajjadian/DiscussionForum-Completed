@@ -1,11 +1,10 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Web.Mvc;
-using CompareAttribute = System.ComponentModel.DataAnnotations.CompareAttribute;
 
 namespace Data.ViewModels
 {
@@ -15,9 +14,9 @@ namespace Data.ViewModels
         private const string remoteControllerName = "Register";
 
         [Required(ErrorMessage = "نام کاربری را وارد کنید")]
-        [Remote(nameof(remoteActionName), nameof(remoteControllerName), ErrorMessage = "نام کاربری موجود میباشد")]
+        [Remote(remoteActionName, remoteControllerName, ErrorMessage = "نام کاربری موجود میباشد")]
         public string userName { get; set; }
-
+        
         [Required(ErrorMessage = "رمز عبور را وارد کنید")]
         public string password { get; set; }
 
