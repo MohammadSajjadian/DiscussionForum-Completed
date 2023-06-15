@@ -1,0 +1,52 @@
+﻿
+@{
+    ViewData["Title"] = "Forum List";
+}
+
+@model List<Forum>
+@if (Model.Count != 0)
+{
+    <form asp-action="DeleteSelectedForums" id="deleteAllForm">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">Name</th>
+                    <th scope="col">Discussion</th>
+                    <th scope="col">Actions</th>
+                    <th scope="col" style="margin-right: 100px">Select All <input id="selectAllCheckBox" type="checkbox" /></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.name</td>
+                        <td>@item.discussion.name</td>
+                        <td>
+                            <a ForumId="@item.id" class="submit me-3 btn btn-sm btn-outline-danger">Remove</a>
+                            <a class="me-3 btn btn-sm btn-outline-warning" asp-action="UpdateForum" asp-route-ForumId="@item.id">Edit</a>
+                        </td>
+                        <td>
+                            <input name="ForumIds" value="@item.id" class="isDelete" type="checkbox" />
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <button id="deleteAll" class="btn btn-outline-danger" disabled>Delete All Selected</button>
+    </form>
+
+    <script src="~/CommonJs/ConfirmationMessageInDelete.js"></script>
+    <script>ConfirmAndRedirect('.submit', '/Forum/DeleteForum', 'ForumId')</script>
+    <script src="~/CommonJs/DeleteAllButton.js"></script>
+}
+else
+{
+    <div class="container">
+        <div class="row">
+            <div class="col text-center">
+                <p class="mt-5 fs-3">Forum list is empty!</p>
+            </div>
+        </div>
+    </div>
+}

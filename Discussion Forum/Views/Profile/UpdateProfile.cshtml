@@ -1,0 +1,39 @@
+﻿
+@{
+    ViewData["Title"] = "Edit Profile";
+}
+
+@model ApplicationUserViewModel
+<div class="container">
+    <h1>Edit Profile</h1>
+    <form asp-action="ConfirmEditProfile" enctype="multipart/form-data" method="post" id="submitForm">
+        <div class="form-group">
+            <label>Nickname</label>
+            <input asp-for="nickName" value="@(Model.user.nickName is not null ? Model.user.nickName : "")" type="text" class="form-control">
+            <span asp-validation-for="nickName"></span>
+        </div>
+        <div class="form-group">
+            <label>About Me</label>
+            <textarea asp-for="aboutMe" class="form-control">@(Model.user.aboutMe is not null ? Model.user.aboutMe : "")</textarea>
+            <span asp-validation-for="aboutMe"></span>
+        </div>
+        <div class="form-group">
+            <label for="avatar">Avatar</label>
+            <input asp-for="profileImg" type="file" accept=".jpg" id="avatar" class="form-control">
+            <span style="color:red" id="imageError"></span>
+            <br />
+            @if (Model.user.profileImg is not null)
+            {
+                <img style="width: 200px; border-radius: 10px; margin-top: 10px" src="@($"data:image;base64,{Convert.ToBase64String(Model.user.profileImg)}")" alt="Avatar" class="img-thumbnail" id="avatarImg">
+            }
+            else
+            {
+                <img style="width: 200px; border-radius: 10px; margin-top: 10px" width="100" src="" id="avatarImg" />
+            }
+        </div>
+        <button type="submit" class="btn btn-primary mt-2">Save Changes</button>
+    </form>
+</div>
+
+<script src="~/CommonJs/ConfirmationMessageInAdd.js"></script>
+<script src="~/CommonJs/ImageSettings.js"></script>

@@ -7,23 +7,9 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/Discussion_Forum.styles.css" asp-append-version="true" />
+    <link href="~/CommonCss/TextBoxValidation.css" rel="stylesheet" />
+    <script src="~/lib/jquery/dist/jquery.js"></script>
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
-    <style>
-        .field-validation-error {
-            color: red
-        }
-
-        body {
-            display: flex;
-            flex-direction: column;
-            min-height: 95vh;
-        }
-
-        footer {
-            margin-top: auto;
-        }
-    </style>
 </head>
 <body>
     <header>
@@ -34,24 +20,47 @@
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        @if (User.Identity.IsAuthenticated)
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-controller="Login" asp-action="LogOut">LogOut</a>
-                            </li>
-                        }
-                        else
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-controller="Login" asp-action="Index">Login</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-controller="Register" asp-action="Index">Register</a>
-                            </li>
-                        }
-                    </ul>
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between dropdown">
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <div class="d-flex">
+                            @if (User.IsInRole("admin"))
+                            {
+                                <div class="dropdown me-1">
+                                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">Discussion</button>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="dropdown-item" asp-action="AddDiscussion" asp-controller="Discussion">+Add Discussion</a></li>
+                                        <li><a class="dropdown-item" asp-action="DiscussionList" asp-controller="Discussion">List of Discussions</a></li>
+                                    </ul>
+                                </div>
+
+                                <div class="dropdown me-1">
+                                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">Forum</button>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="dropdown-item" asp-action="AddForum" asp-controller="Forum">+Add Forum</a></li>
+                                        <li><a class="dropdown-item" asp-action="ForumList" asp-controller="Forum">List of Forums</a></li>
+                                    </ul>
+                                </div>
+                            }
+                            <a class="btn btn-secondary text-light" style="margin-right: 5px" asp-action="AddTopic" asp-controller="Topic">+Add Topic</a>
+                            <div class="dropdown me-1">
+                                <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">Account</button>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" asp-action="Index" asp-controller="Profile">Profile</a></li>
+                                    <li><a class="dropdown-item" asp-action="UpdateProfile" asp-controller="Profile">Edit</a></li>
+                                    <li><a class="dropdown-item" asp-action="ChangePassword" asp-controller="Profile">Change Password</a></li>
+                                </ul>
+                            </div>
+                            <a class="nav-link text-dark" asp-controller="Login" asp-action="LogOut">LogOut</a>
+                        </div>
+                    }
+                    else
+                    {
+                        <ul class="navbar-nav flex-grow-1">
+                            <li class="nav-item"><a class="nav-link text-dark" asp-controller="Login" asp-action="Index">Login</a></li>
+                            <li class="nav-item"><a class="nav-link text-dark" asp-controller="Register" asp-action="Index">Register</a></li>
+                        </ul>
+                    }
                 </div>
             </div>
         </nav>
@@ -67,9 +76,9 @@
             &copy; 2022 - Discussion_Forum
         </div>
     </footer>
+    <script src="https://cdn.datatables.net/v/bs5/dt-1.13.4/datatables.min.js"></script>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/lib/jquery/dist/jquery.js"></script>
     <script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
     <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
@@ -82,9 +91,9 @@
     <script>
         Swal.fire({
             icon: 'error',
-            title: 'خطا!',
+            title: 'Error!',
             text: '@Html.Raw(TempData["error"])',
-            confirmButtonText: 'باشه',
+            confirmButtonText: 'Ok',
         })
     </script>
 }
@@ -95,7 +104,7 @@
         Swal.fire({
             icon: 'success',
             text: '@Html.Raw(TempData["success"])',
-            confirmButtonText: 'باشه',
+            confirmButtonText: 'Ok',
         })
     </script>
 }
@@ -105,9 +114,9 @@
     <script>
         Swal.fire({
             icon: 'info',
-            title: 'پبغام',
+            title: 'Message',
             text: '@Html.Raw(TempData["info"])',
-            confirmButtonText: 'باشه',
+            confirmButtonText: 'Ok',
         })
     </script>
 }
@@ -117,9 +126,9 @@
     <script>
         Swal.fire({
             icon: 'warning',
-            title: 'اخطار',
+            title: 'Warning',
             text: '@Html.Raw(TempData["warning"])',
-            confirmButtonText: 'باشه',
+            confirmButtonText: 'Ok',
         })
     </script>
 }

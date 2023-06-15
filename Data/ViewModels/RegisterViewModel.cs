@@ -13,15 +13,15 @@ namespace Data.ViewModels
         private const string remoteActionName = "IsUserNameExist";
         private const string remoteControllerName = "Register";
 
-        [Required(ErrorMessage = "نام کاربری را وارد کنید")]
-        [Remote(remoteActionName, remoteControllerName, ErrorMessage = "نام کاربری موجود میباشد")]
+        [Required(ErrorMessage = "Please Enter UserName")]
+        [Remote(remoteActionName, remoteControllerName, ErrorMessage = "UserName Already Exist")]
         public string userName { get; set; }
         
-        [Required(ErrorMessage = "رمز عبور را وارد کنید")]
+        [Required(ErrorMessage = "Please Enter Password")]
         public string password { get; set; }
 
-        [Required(ErrorMessage = "تکرار رمز عبور را وارد کنید")]
-        [Compare(nameof(password), ErrorMessage = "رمز عبور با تکرار رمز عبور برابر نیست")]
+        [Required(ErrorMessage = "Please Enter RePassword")]
+        [Compare(nameof(password), ErrorMessage = "Password and RePassword are Not Match")]
         public string rePassword { get; set; }
     }
 }

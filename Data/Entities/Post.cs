@@ -22,9 +22,7 @@ namespace Data.Entities
         #endregion
 
         #region ICollections
-        public ICollection<Report> reports { get; set; }
         public ICollection<Like> likes { get; set; }
-        public ICollection<Save> saves { get; set; }
         #endregion
     }
 }

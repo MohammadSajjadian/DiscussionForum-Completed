@@ -1,0 +1,55 @@
+﻿
+@{
+    ViewData["Title"] = $"{Model.name} Forum";
+}
+
+<link href="~/CommonCss/TableCss.css" rel="stylesheet" />
+
+@model Forum
+
+@if (Model.topics.Count != 0)
+{
+    <table class="table mt-5 caption-top" id="myTable">
+        <caption>@($"{Model.topics.Count} Topics")</caption>
+        <thead class="table-primary">
+            <tr>
+                <th>@Model.name</th>
+                <td>Posts</td>
+                <td>Latest Post</td>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var t in Model.topics)
+            {
+                <tr>
+                    <th><a class="text-decoration-none text-black" asp-action="Index" asp-controller="Topic" asp-route-topicId="@t.id" asp-route-topicName="@t.name.Replace(" ", "-")">@t.name</a></th>
+                    <td class="color-gray">@(t.posts.Count != 0 ? t.posts.Count : "-")</td>
+                    <td>
+                        @if (t.posts.Count != 0)
+                        {
+                            Post post = t.posts.Last();
+                            <a class="text-decoration-none text-black" asp-action="Index" asp-controller="Topic" asp-route-topicId="@t.id" asp-route-topicName="@t.name.Replace(" ", "-")">@(post.description.Length > 20 ? post.description.Substring(0, 20) : post.description)</a>
+                            <br />
+                            <span class="color-gray">@post.createTime</span><br />
+                            <span class="color-red">@(post.ApplicationUser.nickName != null ? post.ApplicationUser.nickName : post.ApplicationUser.UserName)</span>
+                        }
+                        else
+                        {
+                            <p>-</p>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <div class="container">
+        <div class="row">
+            <div class="col text-center">
+                <p class="mt-5 fs-3">@($"{Model.name} Forum is empty!")</p>
+            </div>
+        </div>
+    </div>
+}

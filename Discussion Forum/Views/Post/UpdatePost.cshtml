@@ -1,0 +1,21 @@
+﻿
+@{
+    ViewData["Title"] = "Update Post";
+}
+
+@model PostViewModel
+<div class="container">
+    <form asp-action="ConfirmUpdatePost" id="submitForm">
+        <div class="form-group">
+            <input value="@Model.post.id" asp-for="id" hidden />
+            <label>Description:</label>
+            <textarea class="form-control" asp-for="description" rows="5">@Model.post.description</textarea>
+            <span asp-validation-for="description"></span>
+        </div>
+        <div style="margin-top: 10px">
+            <button class="btn btn-primary" type="submit">Save Changes</button>
+        </div>
+    </form>
+</div>
+
+<script src="~/CommonJs/ConfirmationMessageInAdd.js"></script>

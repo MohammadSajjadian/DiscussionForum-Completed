@@ -70,8 +70,8 @@ $.extend( $.fn, {
 				function handle() {
 					var hidden, result;
 
-					// Insert a hidden input as a replacement for the missing submit button
-					// The hidden input is inserted in two cases:
+					// Add a hidden input as a replacement for the missing submit button
+					// The hidden input is Added in two cases:
 					//   - A user defined a `submitHandler`
 					//   - There was a pending request due to `remote` method and `stopRequest()`
 					//     was called to submit the form in case it's valid
@@ -313,7 +313,7 @@ $.extend( $.validator, {
 			// Up arrow    => 38
 			// Right arrow => 39
 			// Down arrow  => 40
-			// Insert      => 45
+			// Add      => 45
 			// Num lock    => 144
 			// AltGr key   => 225
 			var excludedKeys = [
@@ -961,7 +961,7 @@ $.extend( $.validator, {
 				} else if ( this.settings.errorPlacement ) {
 					this.settings.errorPlacement.call( this, place, $( element ) );
 				} else {
-					place.insertAfter( element );
+					place.AddAfter( element );
 				}
 
 				// Link error back to the element

@@ -1,0 +1,147 @@
+﻿
+@{
+    ViewData["Title"] = "Profile";
+}
+
+@model ApplicationUser
+<div class="container">
+    <h1>Profile</h1>
+    <dl class="row">
+        <dt class="col-sm-3">Nickname</dt>
+        <dd class="col-sm-9">@(Model.nickName is not null ? Model.nickName : "-")</dd>
+
+        <dt class="col-sm-3">About Me</dt>
+        <dd class="col-sm-9">@(Model.aboutMe is not null ? Model.aboutMe : "-")</dd>
+
+        <dt class="col-sm-3">Avatar</dt>
+        @if (Model.profileImg is not null)
+        {
+            <dd class="col-sm-9"><img src="@($"data:image;base64,{Convert.ToBase64String(Model.profileImg)}")" alt="Avatar" class="img-thumbnail rounded-circle"></dd>
+        }
+        else
+        {
+            <dd class="col-sm-9"><img width="100" src="~/Images/download.jpg" class="img-thumbnail rounded-circle" /></dd>
+        }
+    </dl>
+    <a asp-action="UpdateProfile" class="btn btn-primary">Edit</a>
+</div>
+@if (Model.topics.Count != 0)
+{
+    <div class="mt-3">
+        <h1>Topics</h1>
+        <form asp-action="DeleteSelectedTopics" asp-controller="Topic" id="deleteAllForm">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">Name</th>
+                        <th scope="col">Description</th>
+                        <th scope="col">Forum</th>
+                        <th scope="col">Created Time</th>
+                        <th scope="col">Actions</th>
+                        <th scope="col" style="margin-right: 100px">Select All <input id="selectAllCheckBox" type="checkbox" /></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var t in Model.topics)
+                    {
+                        <tr>
+                            <td>
+                                <a class="text-decoration-none text-black" asp-action="Index" asp-controller="Topic" asp-route-topicId="@t.id" asp-route-topicName="@t.name.Replace(" ", "-")">@t.name</a>
+                            </td>
+                            @if (t.description is null)
+                            {
+                                <td>@(t.description.Length < 20 ? t.description : t.description.Substring(1, 20))</td>
+                            }
+                            else
+                            {
+                                <td>-</td>
+                            }
+                            <td>@t.Forum.name</td>
+                            <td>@t.createTime</td>
+                            <td>
+                                <a TopicId="@t.id" class="topicSubmit me-3 btn btn-sm btn-outline-danger">Remove</a>
+                                <a class="me-3 btn btn-sm btn-outline-warning" asp-action="UpdateTopic" asp-controller="Topic" asp-route-TopicId="@t.id">Edit</a>
+                            </td>
+                            <td>
+                                <input name="TopicIds" value="@t.id" class="isDelete" type="checkbox" />
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            <button id="deleteAll" class="btn btn-outline-danger" disabled>Delete All Selected</button>
+        </form>
+
+        <script src="~/CommonJs/ConfirmationMessageInDelete.js"></script>
+        <script>ConfirmAndRedirect('.submit', '/Topic/DeleteTopic', 'TopicId')</script>
+        <script src="~/CommonJs/DeleteAllButton.js"></script>
+    </div>
+}
+else
+{
+    <div class="container">
+        <div class="row">
+            <div class="col text-center">
+                <p class="mt-5 fs-3">Topic list is empty!</p>
+            </div>
+        </div>
+    </div>
+}
+
+<hr />
+
+@if (Model.posts.Count != 0)
+{
+    <div class="mt-3">
+        <h1>Posts</h1>
+        <form asp-action="DeleteSelectedPost" asp-controller="Post" id="deleteAllForm">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">Description</th>
+                        <th scope="col">Topic</th>
+                        <th scope="col">Created Time</th>
+                        <th scope="col">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var p in Model.posts)
+                    {
+                        <tr>
+                            @if (p.description is not null)
+                            {
+                                <td>
+                                    <a class="text-decoration-none text-black" asp-action="Index" asp-controller="Topic" asp-route-topicId="@p.topic.id" asp-route-topicName="@p.topic.name.Replace(" ", "-")">@(p.description.Length < 20 ? p.description : p.description.Substring(1, 20))</a>
+                                </td>
+                            }
+                            else
+                            {
+                                <td>-</td>
+                            }
+                            <td>
+                                <a class="text-decoration-none text-black" asp-action="Index" asp-controller="Topic" asp-route-topicId="@p.topic.id" asp-route-topicName="@p.topic.name.Replace(" ", "-")">@p.topic.name</a>
+                            </td>
+                            <td>@p.createTime</td>
+                            <td>
+                                <a class="me-3 btn btn-sm btn-outline-warning" asp-action="UpdatePost" asp-controller="Post" asp-route-PostId="@p.id">Edit</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </form>
+    </div>
+}
+else
+{
+    <div class="container">
+        <div class="row">
+            <div class="col text-center">
+                <p class="mt-5 fs-3">Post list is empty!</p>
+            </div>
+        </div>
+    </div>
+}
+<script src="~/CommonJs/ConfirmationMessageInDelete.js"></script>
+<script>ConfirmAndRedirect('.topicSubmit', '/Topic/DeleteTopic', 'Topic')</script>
+<script src="~/CommonJs/DeleteAllButton.js"></script>

@@ -17,8 +17,6 @@ public class ApplicationUser : IdentityUser
     #region ICollections
     public ICollection<Topic> topics { get; set; }
     public ICollection<Post> posts { get; set; }
-    public ICollection<Report> reports { get; set; }
     public ICollection<Like> likes { get; set; }
-    public ICollection<Save> saves { get; set; }
     #endregion
 }

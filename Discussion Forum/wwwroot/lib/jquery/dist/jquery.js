@@ -2646,7 +2646,7 @@ function matcherFromTokens( tokens ) {
 					i > 1 && elementMatcher( matchers ),
 					i > 1 && toSelector(
 
-					// If the preceding token was a descendant combinator, insert an implicit any-element `*`
+					// If the preceding token was a descendant combinator, Add an implicit any-element `*`
 					tokens
 						.slice( 0, i - 1 )
 						.concat( { value: tokens[ i - 2 ].type === " " ? "*" : "" } )
@@ -4928,7 +4928,7 @@ var rscriptType = ( /^$|^module$|\/(?:java|ecma)script/i );
 	support.noCloneChecked = !!div.cloneNode( true ).lastChild.defaultValue;
 
 	// Support: IE <=9 only
-	// IE <=9 replaces <option> tags with their contents when inserted outside of
+	// IE <=9 replaces <option> tags with their contents when Added outside of
 	// the select element.
 	div.innerHTML = "<option></option>";
 	support.option = !!div.lastChild;
@@ -4938,7 +4938,7 @@ var rscriptType = ( /^$|^module$|\/(?:java|ecma)script/i );
 // We have to close these tags to support XHTML (#13200)
 var wrapMap = {
 
-	// XHTML parsers do not magically insert elements in the
+	// XHTML parsers do not magically Add elements in the
 	// same way that tag soup parsers do. So we cannot shorten
 	// this by omitting <tbody> or other required elements.
 	thead: [ 1, "<table>", "</table>" ],
@@ -6109,7 +6109,7 @@ function domManip( collection, args, callback, ignored ) {
 				// Reenable scripts
 				jQuery.map( scripts, restoreScript );
 
-				// Evaluate executable scripts on first document insertion
+				// Evaluate executable scripts on first document Addion
 				for ( i = 0; i < hasScripts; i++ ) {
 					node = scripts[ i ];
 					if ( rscriptType.test( node.type || "" ) &&
@@ -6273,7 +6273,7 @@ jQuery.fn.extend( {
 		return domManip( this, arguments, function( elem ) {
 			if ( this.nodeType === 1 || this.nodeType === 11 || this.nodeType === 9 ) {
 				var target = manipulationTarget( this, elem );
-				target.insertBefore( elem, target.firstChild );
+				target.AddBefore( elem, target.firstChild );
 			}
 		} );
 	},
@@ -6281,7 +6281,7 @@ jQuery.fn.extend( {
 	before: function() {
 		return domManip( this, arguments, function( elem ) {
 			if ( this.parentNode ) {
-				this.parentNode.insertBefore( elem, this );
+				this.parentNode.AddBefore( elem, this );
 			}
 		} );
 	},
@@ -6289,7 +6289,7 @@ jQuery.fn.extend( {
 	after: function() {
 		return domManip( this, arguments, function( elem ) {
 			if ( this.parentNode ) {
-				this.parentNode.insertBefore( elem, this.nextSibling );
+				this.parentNode.AddBefore( elem, this.nextSibling );
 			}
 		} );
 	},
@@ -6382,20 +6382,20 @@ jQuery.fn.extend( {
 jQuery.each( {
 	appendTo: "append",
 	prependTo: "prepend",
-	insertBefore: "before",
-	insertAfter: "after",
+	AddBefore: "before",
+	AddAfter: "after",
 	replaceAll: "replaceWith"
 }, function( name, original ) {
 	jQuery.fn[ name ] = function( selector ) {
 		var elems,
 			ret = [],
-			insert = jQuery( selector ),
-			last = insert.length - 1,
+			Add = jQuery( selector ),
+			last = Add.length - 1,
 			i = 0;
 
 		for ( ; i <= last; i++ ) {
 			elems = i === last ? this : this.clone( true );
-			jQuery( insert[ i ] )[ original ]( elems );
+			jQuery( Add[ i ] )[ original ]( elems );
 
 			// Support: Android <=4.0 only, PhantomJS 1 only
 			// .get() because push.apply(_, arraylike) throws on ancient WebKit
@@ -6425,7 +6425,7 @@ var swap = function( elem, options, callback ) {
 	var ret, name,
 		old = {};
 
-	// Remember the old values, and insert the new ones
+	// Remember the old values, and Add the new ones
 	for ( name in options ) {
 		old[ name ] = elem.style[ name ];
 		elem.style[ name ] = options[ name ];
@@ -9238,7 +9238,7 @@ function ajaxConvert( s, response, jqXHR, isSuccess ) {
 								if ( conv === true ) {
 									conv = converters[ conv2 ];
 
-								// Otherwise, insert the intermediate dataType
+								// Otherwise, Add the intermediate dataType
 								} else if ( converters[ conv2 ] !== true ) {
 									current = tmp[ 0 ];
 									dataTypes.unshift( tmp[ 1 ] );
@@ -9890,7 +9890,7 @@ jQuery.fn.extend( {
 			wrap = jQuery( html, this[ 0 ].ownerDocument ).eq( 0 ).clone( true );
 
 			if ( this[ 0 ].parentNode ) {
-				wrap.insertBefore( this[ 0 ] );
+				wrap.AddBefore( this[ 0 ] );
 			}
 
 			wrap.map( function() {
@@ -10219,7 +10219,7 @@ jQuery.ajaxPrefilter( "json jsonp", function( s, originalSettings, jqXHR ) {
 			s.jsonpCallback() :
 			s.jsonpCallback;
 
-		// Insert callback into url or form data
+		// Add callback into url or form data
 		if ( jsonProp ) {
 			s[ jsonProp ] = s[ jsonProp ].replace( rjsonp, "$1" + callbackName );
 		} else if ( s.jsonp !== false ) {

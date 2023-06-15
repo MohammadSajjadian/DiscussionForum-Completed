@@ -1,0 +1,20 @@
+﻿
+@{
+    ViewData["Title"] = "Add Discussion";
+}
+
+@model DiscussionViewModel
+<div class="container">
+    <form asp-action="ConfirmAddDiscussion" id="submitForm">
+        <div class="form-group">
+            <label>Name:</label>
+            <input class="form-control" asp-for="@Model.name" />
+            <span asp-validation-for="@Model.name"></span>
+        </div>
+        <div style="margin-top: 10px">
+            <button class="btn btn-outline-success" type="submit">Add</button>
+        </div>
+    </form>
+</div>
+
+<script src="~/CommonJs/ConfirmationMessageInAdd.js"></script>
