@@ -17,7 +17,7 @@ namespace Data.Entities
         [ForeignKey(nameof(forumId))]
         public Forum Forum { get; set; }
 
-        public string userId { get; set; } = null!;
+        public string userId { get; set; }
         [ForeignKey(nameof(userId))]
         public ApplicationUser ApplicationUser { get; set; }
         #endregion

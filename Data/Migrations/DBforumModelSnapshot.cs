@@ -194,64 +194,6 @@ namespace Data.Migrations
                     b.ToTable("posts");
                 });
 
-            modelBuilder.Entity("Data.Entities.Report", b =>
-                {
-                    b.Property<int>("id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"), 1L, 1);
-
-                    b.Property<DateTime>("createTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("description")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("postId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("userId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("id");
-
-                    b.HasIndex("postId");
-
-                    b.HasIndex("userId");
-
-                    b.ToTable("reports");
-                });
-
-            modelBuilder.Entity("Data.Entities.Save", b =>
-                {
-                    b.Property<int>("id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"), 1L, 1);
-
-                    b.Property<DateTime>("createTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("description")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("postId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("userId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("id");
-
-                    b.HasIndex("postId");
-
-                    b.HasIndex("userId");
-
-                    b.ToTable("saves");
-                });
-
             modelBuilder.Entity("Data.Entities.Topic", b =>
                 {
                     b.Property<int>("id")
@@ -466,40 +408,6 @@ namespace Data.Migrations
                     b.Navigation("topic");
                 });
 
-            modelBuilder.Entity("Data.Entities.Report", b =>
-                {
-                    b.HasOne("Data.Entities.Post", "post")
-                        .WithMany("reports")
-                        .HasForeignKey("postId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Data.Entities.ApplicationUser", "applicationUser")
-                        .WithMany("reports")
-                        .HasForeignKey("userId");
-
-                    b.Navigation("applicationUser");
-
-                    b.Navigation("post");
-                });
-
-            modelBuilder.Entity("Data.Entities.Save", b =>
-                {
-                    b.HasOne("Data.Entities.Post", "Post")
-                        .WithMany("saves")
-                        .HasForeignKey("postId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Data.Entities.ApplicationUser", "applicationUser")
-                        .WithMany("saves")
-                        .HasForeignKey("userId");
-
-                    b.Navigation("Post");
-
-                    b.Navigation("applicationUser");
-                });
-
             modelBuilder.Entity("Data.Entities.Topic", b =>
                 {
                     b.HasOne("Data.Entities.Forum", "Forum")
@@ -574,10 +482,6 @@ namespace Data.Migrations
 
                     b.Navigation("posts");
 
-                    b.Navigation("reports");
-
-                    b.Navigation("saves");
-
                     b.Navigation("topics");
                 });
 
@@ -594,10 +498,6 @@ namespace Data.Migrations
             modelBuilder.Entity("Data.Entities.Post", b =>
                 {
                     b.Navigation("likes");
-
-                    b.Navigation("reports");
-
-                    b.Navigation("saves");
                 });
 
             modelBuilder.Entity("Data.Entities.Topic", b =>

@@ -7,13 +7,11 @@ namespace Data.Context;
 
 public class DBforum : IdentityDbContext<ApplicationUser>
 {
-    public DbSet<Discussion> discussions { get; set; } = null!;
-    public DbSet<Forum> forums { get; set; } = null!;
-    public DbSet<Topic> topics { get; set; } = null!;
-    public DbSet<Post> posts { get; set; } = null!;
-    public DbSet<Report> reports { get; set; } = null!;
-    public DbSet<Like> likes { get; set; } = null!;
-    public DbSet<Save> saves { get; set; } = null!;
+    public DbSet<Discussion> discussions { get; set; }
+    public DbSet<Forum> forums { get; set; }
+    public DbSet<Topic> topics { get; set; }
+    public DbSet<Post> posts { get; set; }
+    public DbSet<Like> likes { get; set; }
 
     public DBforum(DbContextOptions<DBforum> options)
         : base(options)

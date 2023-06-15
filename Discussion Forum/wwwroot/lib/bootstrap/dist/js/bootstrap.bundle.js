@@ -5348,7 +5348,7 @@
     HIDDEN: `hidden${EVENT_KEY$4}`,
     SHOW: `show${EVENT_KEY$4}`,
     SHOWN: `shown${EVENT_KEY$4}`,
-    INSERTED: `inserted${EVENT_KEY$4}`,
+    AddED: `Added${EVENT_KEY$4}`,
     CLICK: `click${EVENT_KEY$4}`,
     FOCUSIN: `focusin${EVENT_KEY$4}`,
     FOCUSOUT: `focusout${EVENT_KEY$4}`,
@@ -5504,7 +5504,7 @@
 
       if (!this._element.ownerDocument.documentElement.contains(this.tip)) {
         container.append(tip);
-        EventHandler.trigger(this._element, this.constructor.Event.INSERTED);
+        EventHandler.trigger(this._element, this.constructor.Event.AddED);
       }
 
       if (this._popper) {
@@ -6011,7 +6011,7 @@
     HIDDEN: `hidden${EVENT_KEY$3}`,
     SHOW: `show${EVENT_KEY$3}`,
     SHOWN: `shown${EVENT_KEY$3}`,
-    INSERTED: `inserted${EVENT_KEY$3}`,
+    AddED: `Added${EVENT_KEY$3}`,
     CLICK: `click${EVENT_KEY$3}`,
     FOCUSIN: `focusin${EVENT_KEY$3}`,
     FOCUSOUT: `focusout${EVENT_KEY$3}`,

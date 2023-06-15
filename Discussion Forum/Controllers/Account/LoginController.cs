@@ -3,19 +3,21 @@ using Data.ViewModels;
 using Extension.LockedOut;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Service.Facades;
+using Service.Messages;
 
 namespace Discussion_Forum.Controllers.Account
 {
-    public class LoginController : CustomController
+    public class LoginController : Controller
     {
         #region DependencyInjection
-        private readonly UserManager<ApplicationUser> userManager;
+        private readonly GlobalFacade globalFacade;
         private readonly SignInManager<ApplicationUser> signInManager;
 
-        public LoginController(UserManager<ApplicationUser> _userManager, SignInManager<ApplicationUser> _signInManager)
+        public LoginController(GlobalFacade globalFacade, SignInManager<ApplicationUser> signInManager)
         {
-            userManager = _userManager;
-            signInManager = _signInManager;
+            this.globalFacade = globalFacade;
+            this.signInManager = signInManager;
         }
         #endregion
 
@@ -26,27 +28,27 @@ namespace Discussion_Forum.Controllers.Account
 
         public async Task<IActionResult> LoginConfirm(LoginViewModel loginViewModel)
         {
-            ApplicationUser user = await userManager.FindByNameAsync(loginViewModel.userName);
+            ApplicationUser user = await globalFacade.userManager.FindByNameAsync(loginViewModel.userName);
             if (user != null)
             {
                 var status = await signInManager.PasswordSignInAsync(user, loginViewModel.password, loginViewModel.rememberMe, true);
 
-                if (status.IsLockedOut == true)
+                if (status.IsLockedOut)
                 {
-                    TempData[warning] = lockedOutMessage;
-                    return RedirectToAction(index, homeControllerName);
+                    globalFacade.messageService.LockedOutTrue(TempData);
+                    return RedirectToAction(nameof(HomeController.Index), nameof(HomeController).Replace("Controller", ""));
                 }
 
-                if (status.Succeeded == true) return RedirectToAction(index, homeControllerName);
+                if (status.Succeeded) return RedirectToAction(nameof(HomeController.Index), nameof(HomeController).Replace("Controller", ""));
                 else
                 {
-                    TempData[error] = loginError;
+                    globalFacade.messageService.LoginError(TempData);
                     return RedirectToAction(nameof(Index));
                 }
             }
             else
             {
-                TempData[error] = userNotFound;
+                globalFacade.messageService.UserNotFound(TempData);
                 return RedirectToAction(nameof(Index));
             }
         }
@@ -55,7 +57,7 @@ namespace Discussion_Forum.Controllers.Account
         {
             await signInManager.SignOutAsync();
 
-            return RedirectToAction(index, homeControllerName);
+            return RedirectToAction(nameof(HomeController.Index), nameof(HomeController).Replace("Controller", ""));
         }
     }
 }

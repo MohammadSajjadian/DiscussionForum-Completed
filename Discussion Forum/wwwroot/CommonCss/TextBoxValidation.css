@@ -1,0 +1,13 @@
+﻿.field-validation-error {
+    color: red
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 95vh;
+}
+
+footer {
+    margin-top: auto;
+}

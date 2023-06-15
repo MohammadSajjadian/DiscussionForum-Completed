@@ -1,0 +1,68 @@
+﻿
+@{
+    ViewData["Title"] = "Add Topic";
+}
+<link href="~/CommonCss/TableCss.css" rel="stylesheet" />
+
+@model TopicViewModel
+<div class="container">
+    <form asp-action="ConfirmAddTopic" id="submitForm">
+        <div class="form-group">
+            <div>
+                <label>Discussion:</label>
+                <select asp-for="@Model.discussionId" class="form-control form-select" id="discussionSelect" discussionId="@Model.discussionId">
+                    <option value="">-- Select a discussion --</option>
+                    @foreach (var item in Model.discussions)
+                    {
+                        <option value="@item.id">@item.name</option>
+                    }
+                </select>
+                <span asp-validation-for="@Model.discussionId"></span>
+            </div>
+
+            <div>
+                <label>Forum:</label>
+                <select asp-for="@Model.forumId" class="form-control form-select" id="forumSelect" disabled>
+                    <option value="">-- Select a forum --</option>
+                </select>
+                <span asp-validation-for="@Model.forumId"></span>
+            </div>
+        </div>
+        <div class="form-group" style="margin-top: 15px">
+            <label>Name:</label>
+            <input class="form-control" asp-for="@Model.name" />
+            <span asp-validation-for="@Model.name"></span>
+        </div>
+        <div class="form-group" style="margin-top: 15px">
+            <label>Description:</label>
+            <textarea class="form-control" asp-for="@Model.description" rows="5"></textarea>
+            <span asp-validation-for="@Model.description"></span>
+            <span class="color-gray" id="char-counter">1000</span>
+            <span class="color-gray">/1000</span>
+        </div>
+        <div style="margin-top: 10px">
+            <button class="btn btn-outline-success" type="submit">Add</button>
+        </div>
+    </form>
+</div>
+
+<script src="~/CommonJs/ConfirmationMessageInAdd.js"></script>
+<script src="~/CommonJs/SelectBoxChange.js"></script>
+<script src="~/CommonJs/CharacterCounter.js"></script>
+<script>
+    onSelectBoxChange($(discussionSelect), $(forumSelect),
+        function () {
+            $(forumSelect).find('option:not(:first)').remove();
+        },
+        function () {
+            $(discussionSelect).change(function () {
+                if ($(this).val() != '') {
+                    $(forumSelect).prop('disabled', false);
+                } else {
+                    $(forumSelect).prop('disabled', true);
+                }
+            })
+        })
+
+    Counter(1000)
+</script>

@@ -1,0 +1,15 @@
+﻿th, td {
+    width: 33.33% !important;
+}
+
+.color-gray {
+    color: #919191;
+}
+
+.color-red {
+    color: #e93368;
+}
+
+.inline{
+    display: inline
+}

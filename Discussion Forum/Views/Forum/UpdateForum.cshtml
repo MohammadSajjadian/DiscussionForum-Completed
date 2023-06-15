@@ -1,0 +1,34 @@
+﻿
+@{
+    ViewData["Title"] = "Update Forum";
+}
+
+@model ForumViewModel
+<div class="container">
+    <form asp-action="ConfirmUpdateForum" id="submitForm">
+        <div class="form-group">
+            <label>Discussion:</label>
+            <select asp-for="@Model.discussionId" class="form-control form-select">
+                <option value="@Model.discussionId">@Model.forum.discussion.name</option>
+                @foreach (var item in Model.discussions)
+                {
+                    if (item.name != Model.forum.discussion.name)
+                    {
+                        <option value="@item.id">@item.name</option>
+                    }
+                }
+            </select>
+        </div>
+        <div class="form-group">
+            <input value="@Model.forum.id" asp-for="forum.id" hidden />
+            <label>Name:</label>
+            <input class="form-control" value="@Model.forum.name" asp-for="@Model.forum.name" />
+            <span asp-validation-for="@Model.name"></span>
+        </div>
+        <div style="margin-top: 10px">
+            <button class="btn btn-outline-warning" type="submit">Save Changes</button>
+        </div>
+    </form>
+</div>
+
+<script src="~/CommonJs/ConfirmationMessageInAdd.js"></script>

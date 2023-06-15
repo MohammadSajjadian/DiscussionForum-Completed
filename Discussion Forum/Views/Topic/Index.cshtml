@@ -1,0 +1,114 @@
+﻿
+@{
+    ViewData["Title"] = Model.name;
+}
+
+<link href="~/CommonCss/TableCss.css" rel="stylesheet" />
+
+@model Topic
+@inject UserManager<ApplicationUser> userManager
+<div class="container">
+    <span class="color-red inline h1">Title   </span>
+    <h1 class="inline">@Model.name</h1>
+    <hr />
+    <div class="d-flex align-items-center mb-3">
+        <div class="flex-shrink-0">
+            @if (Model.ApplicationUser.profileImg != null)
+            {
+                <img src="@($"data:image;base64,{Convert.ToBase64String(Model.ApplicationUser.profileImg)}")" alt="Avatar" class="img-thumbnail rounded-circle">
+            }
+            else
+            {
+                <img width="100" src="~/Images/download.jpg" class="img-thumbnail rounded-circle" />
+            }
+        </div>
+        <div class="d-flex flex-column ms-3">
+            <h4 class="color-red">@(Model.ApplicationUser.nickName != null ? Model.ApplicationUser.nickName : Model.ApplicationUser.UserName)</h4>
+            <p style="white-space: pre-line">@Model.description</p>
+            <span style="color:gray">@Model.createTime</span>
+        </div>
+    </div>
+    <hr />
+
+    @if (Model.posts.Count != 0)
+    {
+        <h2>Comments</h2>
+        @foreach (var p in Model.posts)
+        {
+            <div class="d-flex align-items-center mb-3 mt-4">
+                <div class="flex-shrink-0">
+                    @if (p.ApplicationUser.profileImg != null)
+                    {
+                        <img width="80" src="@($"data:image;base64,{Convert.ToBase64String(p.ApplicationUser.profileImg)}")" alt="Avatar" class="img-thumbnail rounded-circle">
+                    }
+                    else
+                    {
+                        <img width="100" src="~/Images/download.jpg" class="img-thumbnail rounded-circle" />
+                    }
+                </div>
+                <div class="d-flex flex-column ms-3">
+                    <span style="font-size: 20px" class="color-red">@(p.ApplicationUser.nickName != null ? p.ApplicationUser.nickName : p.ApplicationUser.UserName)</span>
+                    <p style="white-space: pre-line">@p.description</p>
+                    <div class="d-flex align-items-center">
+                        <span class="color-gray">@p.createTime</span>
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            ApplicationUser user = await userManager.FindByNameAsync(User.Identity.Name);
+                            if (p.likes.Any(x => x.userId == user.Id && x.postId == p.id))
+                            {
+                                <button type="button" class="btn btn-light ms-3" id="like" postId="@p.id">Likes: 👍 @p.likes.Count</button>
+                            }
+                            else
+                            {
+                                <button type="button" class="btn btn-light ms-3" id="like" postId="@p.id">Likes: @p.likes.Count</button>
+                            }
+                        }
+                        else
+                        {
+                            <a class="btn btn-light ms-3" asp-action="Index" asp-controller="Login">Likes: @p.likes.Count</a>
+                        }
+                    </div>
+                </div>
+            </div>
+            <hr />
+        }
+    }
+    else
+    {
+        <div class="container">
+            <div class="row">
+                <div class="col text-center">
+                    <p class="mt-5 fs-3">There is no comment about this topic!</p>
+                </div>
+            </div>
+        </div>
+    }
+
+    <h2>Add a Comment</h2>
+    <form asp-action="ConfirmAddPost" asp-controller="Post" asp-route-topicId="@Model.id" asp-route-topicName="@Model.name.Replace(" ", "-")" id="submitForm">
+        <div class="mb-3">
+            <textarea name="description" class="form-control" rows="5" maxlength="500" required></textarea>
+            <span class="color-gray" id="char-counter">500</span>
+            <span class="color-gray">/500</span>
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+</div>
+<script src="~/CommonJs/CharacterCounter.js"></script>
+<script src="~/CommonJs/ConfirmationMessageInAdd.js"></script>
+<script>
+    Counter(500);
+
+    $(function () {
+        $(like).click(function () {
+            var like = this;
+            $.post("/Post/LikeOptions/", { postId: $(this).attr("postId") }, function (value) {
+                if (value.status == true) {
+                    $(like).html('Likes: 👍 ' + value.likes);
+                } else {
+                    $(like).html('Likes: ' + value.likes);
+                }
+            });
+        })
+    })
+</script>

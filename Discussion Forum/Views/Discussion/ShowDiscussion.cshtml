@@ -1,0 +1,57 @@
+﻿
+@{
+    ViewData["Title"] = "Discussion";
+}
+
+<link href="~/CommonCss/TableCss.css" rel="stylesheet" />
+
+@model Discussion
+
+@if (Model.forums.Count != 0)
+{
+    <table class="table mt-5 caption-top">
+        <caption>@($"{Model.forums.Count} Forums")</caption>
+        <thead class="table-primary">
+            <tr>
+                <th>@Model.name</th>
+                <td>Topic</td>
+                <td>Latest Topic</td>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var forum in Model.forums)
+            {
+                <tr>
+                    <th><a class="text-decoration-none text-black" asp-action="ShowForum" asp-controller="Forum" asp-route-forumId="@forum.id" asp-route-forumName="@forum.name.Replace(" ", "-")">@forum.name</a></th>
+                    <td class="color-gray">@(forum.topics.Count != 0 ? forum.topics.Count : "-")</td>
+                    <td>
+                        @if (forum.topics.Count != 0)
+                        {
+                            Topic topic = forum.topics.Last();
+                            <a class="text-decoration-none text-black" asp-action="Index" asp-controller="Topic" asp-route-topicId="@topic.id" asp-route-topicName="@topic.name.Replace(" ", "-")">
+                                @topic.name
+                            </a>
+                            <br />
+                            <span class="color-gray">@topic.createTime</span><br />
+                            <span class="color-red">@(topic.ApplicationUser.nickName != null ? topic.ApplicationUser.nickName : topic.ApplicationUser.UserName)</span>
+                        }
+                        else
+                        {
+                            <p>-</p>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <div class="container">
+        <div class="row">
+            <div class="col text-center">
+                <p class="mt-5 fs-3">@($"{Model.name} Discussion is empty!")</p>
+            </div>
+        </div>
+    </div>
+}

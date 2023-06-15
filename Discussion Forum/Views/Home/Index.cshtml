@@ -2,7 +2,66 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<link href="~/CommonCss/TableCss.css" rel="stylesheet" />
+
+@model List<Discussion>
+<div class="row row-cols-1 row-cols-md-4 g-4 justify-content-center">
+    @foreach (var d in Model)
+    {
+        <div class="col">
+            <a class="text-decoration-none" asp-action="ShowDiscussion" asp-controller="Discussion" asp-route-discussionId="@d.id" asp-route-discussionName="@d.name.Replace(" ", "-")">
+                <div class="card border-primary btn-outline-primary text-center">
+                    <div class="card-body">
+                        <h5 class="card-title">@d.name</h5>
+                    </div>
+                </div>
+            </a>
+        </div>
+    }
 </div>
+
+@foreach (var d in Model)
+{
+    if (d.forums.Count != 0)
+    {
+        <table class="table mt-5 caption-top">
+            <caption>@($"{d.forums.Count} Forums")</caption>
+            <thead class="table-primary">
+                <tr>
+                    <th>
+                        <a class="text-decoration-none text-black" asp-action="ShowDiscussion" asp-controller="Discussion" asp-route-discussionId="@d.id" asp-route-discussionName="@d.name.Replace(" ", "-")">
+                            @d.name
+                        </a>
+                    </th>
+                    <td>Topic</td>
+                    <td>Latest Topic</td>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var f in d.forums)
+                {
+                    <tr>
+                        <th><a class="text-decoration-none text-black" asp-action="ShowForum" asp-controller="Forum" asp-route-forumId="@f.id" asp-route-forumName="@f.name.Replace(" ", "-")">@f.name</a></th>
+                        <td class="color-gray">@(f.topics.Count != 0 ? f.topics.Count : "-")</td>
+                        <td>
+                            @if (f.topics.Count != 0)
+                            {
+                                Topic topic = f.topics.Last();
+                                <a class="text-decoration-none text-black" asp-action="Index" asp-controller="Topic" asp-route-topicId="@topic.id" asp-route-topicName="@topic.name.Replace(" ", "-")">
+                                    @topic.name
+                                </a>
+                                <br />
+                                <span class="color-gray">@topic.createTime</span><br />
+                                <span class="color-red">@(topic.ApplicationUser.nickName is not null ? topic.ApplicationUser.nickName : topic.ApplicationUser.UserName)</span>
+                            }
+                            else
+                            {
+                                <p>-</p>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+}
