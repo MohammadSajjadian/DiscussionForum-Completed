@@ -12,8 +12,8 @@ namespace Service.Email
     {
         public void EmailSender(string subject, string body, string receiver)
         {
-            MailMessage mailMessage = new("jimcary630@gmail.com", receiver) { Subject = subject, Body = body, IsBodyHtml = true };
-            SmtpClient smtpClient = new("smtp.gmail.com", 587) { Credentials = new NetworkCredential("jimcary630@gmail.com", "nejzcbsfvmnzlabw"), EnableSsl = true };
+            MailMessage mailMessage = new("***", receiver) { Subject = subject, Body = body, IsBodyHtml = true };
+            SmtpClient smtpClient = new("smtp.gmail.com", 587) { Credentials = new NetworkCredential("***", "***"), EnableSsl = true };
             smtpClient.Send(mailMessage);
         }
     }
